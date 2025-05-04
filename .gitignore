@@ -1,4 +1,5 @@
 node_modules/
+parser.js
 package.json
 package-lock.json
 out
