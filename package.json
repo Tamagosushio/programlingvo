@@ -1,0 +1,23 @@
+{
+  "name": "programlingvo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx peggy grammar.pegjs -o parser.js && node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tamagosushio/programlingvo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tamagosushio/programlingvo/issues"
+  },
+  "homepage": "https://github.com/Tamagosushio/programlingvo#readme",
+  "devDependencies": {
+    "peggy": "^4.2.0"
+  }
+}
