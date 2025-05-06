@@ -1,47 +1,70 @@
 Start
   = _ p:Program _ {
+    console.log(p);
     return eval(p);
   }
 
-
 Program
-  = vars:(VariableDeclaration _ ";" _)* e:Expression {
-    if(vars.length === 0) return e;
-    const varsCode = vars.reduce((acc, x) => `${acc}${x[0]}; `, "");
-    const returnCode = `return ${e};`;
-    return `(() => { ${varsCode}${returnCode} })()`;
+  = statements:(Statement _ ";" _)* e:Expression? _ {
+    console.log("statements: ", statements);
+    console.log("return: ", e);
+    const code = statements.reduce((acc, x) => `${acc} ${x[0]};\n`, "");
+    const returnCode = `return (${e});`;
+    return `(() => { ${code}${returnCode} })()`;
   }
 
+Statement =
+  VariableDeclaration / ArrowFunctionDeclaration / Expression
+
 VariableDeclaration
-  = "entjero" __ name:Identifier _ "=" _ value:Expression {
+  = "entjero" __ name:Identifier _ "=" _ value:OrExpression {
     return `const ${name} = ${value}`;
   }
 
-Expression = OrExpression
+ArrowFunctionDeclaration
+  = "funkcio" __ name:Identifier _ "=" _ value:LambdaExpression {
+    return `const ${name} = ${value}`;
+  }
 
+Expression = LambdaExpression / OrExpression
+
+
+LambdaExpression
+  = i:Identifier _ "=>" _ e:Expression {
+    return `${i} => ${e}`;
+  }
 OrExpression
-	= head:AndExpression tail:(_ OrOperator _ AndExpression)* {
-    	return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
-    } 
+  = head:AndExpression tail:(_ OrOperator _ AndExpression)* {
+    return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
+  }
 AndExpression
-	= head:EqualExpression tail:(_ AndOperator _ EqualExpression)* {
-    	return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
-    }
+  = head:EqualExpression tail:(_ AndOperator _ EqualExpression)* {
+    return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
+  }
 EqualExpression
   = head:RelatExpression tail:(_ EqualOperator _ RelatExpression)? {
-    return tail===null ? head: `(${head}) ${tail[1]} (${tail[3]})`;
+    return tail === null ? head : `(${head}) ${tail[1]} (${tail[3]})`;
   }
 RelatExpression
   = head:AddExpression tail:(_ RelatOperator _ AddExpression)? {
-    return tail===null ? head: `(${head}) ${tail[1]} (${tail[3]})`;
+    return tail === null ? head : `(${head}) ${tail[1]} (${tail[3]})`;
   }
 AddExpression
   = head:MultiExpression tail:(_ AddOperator _ MultiExpression)* {
     return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
   }
 MultiExpression
-  = head:Term tail:(_ MultiOperator _ MultiExpression)* {
+  = head:CallExpression tail:(_ MultiOperator _ CallExpression)* {
     return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
+  }
+CallExpression
+  = callee:Term tail:(_ Argument)* {
+    return tail.reduce((acc, x) => `${acc}${x[1]}`, callee);
+  }
+
+Argument
+  = "(" _ e:Expression _ ")" {
+    return `(${e})`;
   }
 
 // 演算子定義
@@ -53,17 +76,22 @@ AddOperator = "+" / "-"
 MultiOperator = "*" / "/" / "%"
 
 // 項
-Term = Number / Identifier
+Term
+  = Paren / Number / Identifier / Boolean / Identifier
+
+// 波括弧
+Paren
+  = "{" _  p:Program  _ "}" {
+    return `{ ${p} }`;
+  }
 
 // 数
-Number = Integer / Float
-
+Number = Float / Integer
 // 小数値
 Float
   = Integer "." [0-9]+ {
     return text();
   }
-
 // 整数値
 Integer
   = [1-9] [0-9]* {
@@ -72,7 +100,7 @@ Integer
 
 // 真偽値
 Boolean
-  = ("vera"/"falsa") !IdentifierContinue {
+  = ("vera" / "falsa") !IdentifierContinue {
     return text();
   }
 
@@ -90,4 +118,4 @@ IdentifierStart = [A-Za-z_]
 IdentifierContinue = [0-9A-Za-z_]
 
 __ = [ \t\n\r]+
-_ = [ \t\n\r]*
+_  = [ \t\n\r]*

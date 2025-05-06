@@ -2,12 +2,13 @@
 const parser = require("./parser");
 
 const code = `
-entjero a = 10;
-entjero b = 20;
-b
+entjero x = 10;
+entjero y = 20;
+funkcio duobligi = a => b => a*10 + b%2 + a*b;
+entjero hasilo = duobligi(x)(y);
+hasilo
 `
 
-console.log("purse!");
 const ast = parser.parse(code);
 console.dir(ast, {depth: null});
 
