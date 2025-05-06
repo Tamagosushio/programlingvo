@@ -13,22 +13,19 @@ Program
     return `(() => { ${code}${returnCode} })()`;
   }
 
-Statement =
-  VariableDeclaration / AtFunctionDeclaration / Expression
+Statement = VariableDeclaration / Expression
 
 VariableDeclaration
-  = "entjero" __ name:Identifier _ "=" _ value:OrExpression {
+  = "var" __ name:Identifier _ "=" _ value:Expression {
     return `const ${name} = ${value}`;
   }
 
-AtFunctionDeclaration
-  = "funkcio" __ name:Identifier _ "=" _ value:LambdaExpression {
-    return `const ${name} = ${value}`;
+Expression = LambdaExpression / IfThenElseExpression / OrExpression
+
+IfThenElseExpression
+  = "se" __ a:Expression __ "tiam" __ b:Expression __ "alie" __  c:Expression {
+    return `${a} ? ${b} : ${c}`;
   }
-
-Expression = LambdaExpression / OrExpression
-
-
 LambdaExpression
   = i:Identifier _ "@" _ e:Expression {
     return `${i} => ${e}`;
@@ -111,7 +108,7 @@ Identifier
   }
 
 // 予約語
-ReservedWord = ("entjero"/"vera"/"falsa"/"kaj"/"aux") !IdentifierContinue
+ReservedWord = ("var"/"vera"/"falsa"/"kaj"/"aux") !IdentifierContinue
 // 変数名の先頭文字
 IdentifierStart = [A-Za-z_]
 // 変数名の後続文字
