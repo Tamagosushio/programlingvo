@@ -1,5 +1,6 @@
-var x = 10;
+var x = 30;
 var y=20;
 var adicii = a @ b @ se a>b tiam a alie b;
 var z = adicii(x)(y);
-z
+var s = "abc\n";
+s + z

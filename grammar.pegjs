@@ -74,12 +74,38 @@ MultiOperator = "*" / "/" / "%"
 
 // 項
 Term
-  = Paren / Number / Identifier / Boolean / Identifier
+  = Paren / String / Number / Identifier / Boolean / Identifier
 
 // 波括弧
 Paren
   = "{" _  p:Program  _ "}" {
     return `{ ${p} }`;
+  }
+
+// 文字列
+String
+  = "\"" chars:Char* "\"" {
+    console.log(chars);
+    return `"${chars.join("")}"`;
+  }
+// 文字
+Char
+  = EscapsedChar / NormalChar
+// エスケープ文字
+EscapsedChar
+  = "\\" c:[nrt"\\] {
+    return {
+      "n": "\\n",
+      "r": "\\r",
+      "t": "\\t",
+      "\"": "\\\"",
+      "\\": "\\\\"
+    }[c];
+  }
+// 普通の文字
+NormalChar
+  = !["\\] . {
+    return text();
   }
 
 // 数
