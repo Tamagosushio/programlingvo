@@ -14,14 +14,14 @@ Program
   }
 
 Statement =
-  VariableDeclaration / ArrowFunctionDeclaration / Expression
+  VariableDeclaration / AtFunctionDeclaration / Expression
 
 VariableDeclaration
   = "entjero" __ name:Identifier _ "=" _ value:OrExpression {
     return `const ${name} = ${value}`;
   }
 
-ArrowFunctionDeclaration
+AtFunctionDeclaration
   = "funkcio" __ name:Identifier _ "=" _ value:LambdaExpression {
     return `const ${name} = ${value}`;
   }
@@ -30,7 +30,7 @@ Expression = LambdaExpression / OrExpression
 
 
 LambdaExpression
-  = i:Identifier _ "=>" _ e:Expression {
+  = i:Identifier _ "@" _ e:Expression {
     return `${i} => ${e}`;
   }
 OrExpression

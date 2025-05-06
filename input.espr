@@ -1,0 +1,5 @@
+entjero x = 10;
+entjero y=20;
+funkcio adicii = a @ b @ a+b;
+entjero z = adicii(x)(y);
+z

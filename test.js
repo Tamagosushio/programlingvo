@@ -1,14 +1,8 @@
-
+const fs = require('fs');
 const parser = require("./parser");
+const code = fs.readFileSync("./input.espr", "utf-8");
 
-const code = `
-entjero x = 10;
-entjero y = 20;
-funkcio duobligi = a => b => a*10 + b%2 + a*b;
-entjero hasilo = duobligi(x)(y);
-hasilo
-`
-
+console.log(code);
 const ast = parser.parse(code);
 console.dir(ast, {depth: null});
 
