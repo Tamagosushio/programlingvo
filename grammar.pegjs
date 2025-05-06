@@ -85,22 +85,15 @@ Paren
 // 文字列
 String
   = "\"" chars:Char* "\"" {
-    console.log(chars);
     return `"${chars.join("")}"`;
   }
 // 文字
 Char
-  = EscapsedChar / NormalChar
+  = EscapedChar / NormalChar
 // エスケープ文字
-EscapsedChar
-  = "\\" c:[nrt"\\] {
-    return {
-      "n": "\\n",
-      "r": "\\r",
-      "t": "\\t",
-      "\"": "\\\"",
-      "\\": "\\\\"
-    }[c];
+EscapedChar
+  = "\\" c:. {
+    return "\\" + c;
   }
 // 普通の文字
 NormalChar
