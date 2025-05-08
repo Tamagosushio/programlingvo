@@ -13,13 +13,17 @@ Program
     return `(() => {\n${code}${returnCode}\n})()`;
   }
 
-Statement = Block / ForStatement / WhileStatement / DoWhileStatement / VariableDeclaration / Expression
+Statement = Block / IfThenElseStatement / ForStatement / WhileStatement / DoWhileStatement / VariableDeclaration / Expression
 
 Block
   = "{" _ stmts:(Statement _ ";" _)* _ "}" {
     return `{\n${stmts.map(s => s[0]).join(";\n")};\n}`;
   }
 
+IfThenElseStatement
+  = "se" _ "("_ e:Expression _")" _ "tiam" _ trueBody:Statement _ "alie" _ falseBody:Statement {
+    return `if(${e})${trueBody}else${falseBody}`;
+  }
 ForStatement
   = "por" _ "(" _ init:(Expression / VariableDeclaration)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:Statement {
     const initCode = init ?? "";
