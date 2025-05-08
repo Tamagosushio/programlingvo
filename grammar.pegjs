@@ -141,8 +141,8 @@ Integer
 
 // 真偽値
 Boolean
-  = ("vera" / "falsa") !IdentifierContinue {
-    return text();
+  = bool:("vero" / "malvero") !IdentifierContinue {
+    return text()==="vero" ? "true" : "false";
   }
 
 // 変数名
@@ -153,7 +153,7 @@ Identifier
 
 // 予約語
 ReservedWord
-  = ("var" / "vera" / "falsa" / "kaj" / "aux" / "se" / "tiam" / "alie" / "por" / "dum" / "fari") !IdentifierContinue
+  = ("var" / "vero" / "malvero" / "kaj" / "aux" / "se" / "tiam" / "alie" / "por" / "dum" / "fari") !IdentifierContinue
 // 変数名の先頭文字
 IdentifierStart = [A-Za-z_]
 // 変数名の後続文字
