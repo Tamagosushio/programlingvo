@@ -103,7 +103,7 @@ MultiOperator = "*" / "/" / "%"
 
 // 項
 Term
-  = Paren / String / Number / Identifier / Boolean / Identifier
+  = Paren / String / Number / Identifier / Boolean / Undefined / Null / Identifier
 
 // 丸括弧
 Paren
@@ -149,6 +149,18 @@ Boolean
     return text()==="vero" ? "true" : "false";
   }
 
+// undefined値
+Undefined
+  = "nedifinito" !IdentifierContinue{
+    return "undefined";
+  }
+
+// null値
+Null
+  = "nulo" !IdentifierContinue{
+    return "null";
+  }
+
 // 変数名
 Identifier
   = !ReservedWord head:IdentifierStart tail:IdentifierContinue* {
@@ -157,7 +169,7 @@ Identifier
 
 // 予約語
 ReservedWord
-  = ("var" / "vero" / "malvero" / "kaj" / "aux" / "se" / "tiam" / "alie" / "por" / "dum" / "fari") !IdentifierContinue
+  = ("var" / "nedifinito" / "nulo" / "vero" / "malvero" / "kaj" / "aux" / "se" / "tiam" / "alie" / "por" / "dum" / "fari") !IdentifierContinue
 // 変数名の先頭文字
 IdentifierStart = [A-Za-z_]
 // 変数名の後続文字
