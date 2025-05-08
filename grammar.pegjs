@@ -13,7 +13,7 @@ Program
     return `(() => {\n${code}${returnCode}\n})()`;
   }
 
-Statement = Block / ForStatement / WhileStatement / DoWhileStatement / Expression
+Statement = Block / ForStatement / WhileStatement / DoWhileStatement / VariableDeclaration / Expression
 
 Block
   = "{" _ stmts:(Statement _ ";" _)* _ "}" {
@@ -21,8 +21,11 @@ Block
   }
 
 ForStatement
-  = "por" _ "(" _ init:Expression _ ";" _ cond:Expression _ ";" _ update:Expression _ ")" _ body:Statement {
-    return `for (${init}; ${cond}; ${update}) ${body}`;
+  = "por" _ "(" _ init:(Expression / VariableDeclaration)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:Statement {
+    const initCode = init ?? "";
+    const condCode = cond ?? "";
+    const updateCode = update ?? "";
+    return `for (${initCode}; ${condCode}; ${updateCode}) ${body}`;
   }
 WhileStatement
   = "dum" _ "(" _ cond:Expression _ ")" _ body:Statement {
@@ -33,7 +36,7 @@ DoWhileStatement
     return `do ${body} while(${cond})`;
   }
 
-Expression = LambdaExpression / IfThenElseExpression / VariableDeclaration / AssignmentExpression / OrExpression
+Expression = LambdaExpression / IfThenElseExpression / AssignmentExpression / OrExpression
 
 VariableDeclaration
   = "var" __ name:Identifier _ "=" _ value:Expression {
