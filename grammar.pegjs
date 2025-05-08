@@ -98,10 +98,10 @@ MultiOperator = "*" / "/" / "%"
 Term
   = Paren / String / Number / Identifier / Boolean / Identifier
 
-// 波括弧
+// 丸括弧
 Paren
-  = "{" _  p:Program  _ "}" {
-    return `{ ${p} }`;
+  = "(" _ e:Expression _ ")" {
+    return `(${e})`;
   }
 
 // 文字列

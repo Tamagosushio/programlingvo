@@ -1,22 +1,24 @@
 var x = 30;
 var y=20;
-var adicias = a @ b @ a+b;
+var adicias2 = a @ b @ a+b;
+var adicias3 = a @ b @ c @ a+b+c;
+var adicias4 = a @ b @ c @ d @ a+b+c+d;
 var s = 0;
 
 por(var i = 0; i < 10; i = i + 1){
-  s = adicias(s)(i);
+  s = adicias2(s)(i);
 };
 
 var i = 10;
-dum(i){
-  s = adicias(s)(i);
+dum (i){
+  s = adicias2(s)(i);
   i = i-1;
 };
 
 i = 5;
 fari{
-  s = adicias(s)(i);
+  s = adicias2(s)(i);
   i = i-1;
 }dum(i);
 
-s
+( (1+2)*3 + adicias3((4+5)*6) (se s > 7 tiam 8 alie 9) (i = 10) ) * 10
