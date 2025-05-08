@@ -5,13 +5,17 @@ var adicias3 = a @ b @ c @ a+b+c;
 var adicias4 = a @ b @ c @ d @ a+b+c+d;
 var s = 0;
 
-por(var i = 0; i < 10; i = i + 1){
+var i = 0;
+por(i = 0; i < 10; i = i + 1){
   s = adicias2(s)(i);
 };
 
-var i = 10;
-dum (i){
-  s = adicias2(s)(i);
+dum(i){
+  se(i%2 == 0)tiam{
+    s = adicias2(s)(i);
+  }alie{
+    s = s - i;
+  };
   i = i-1;
 };
 
@@ -21,4 +25,5 @@ fari{
   i = i-1;
 }dum(i);
 
-( (1+2)*3 + adicias3((4+5)*6) (se s > 7 tiam 8 alie 9) (i = 10) ) * 10
+( (1+2)*3 + adicias3((4+5)*6) (se s > 7 tiam 8 alie 9) (i = 10) ) * 10;
+s

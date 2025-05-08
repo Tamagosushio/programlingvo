@@ -1,13 +1,16 @@
 Start
   = _ p:Program _ {
-    console.log(p);
+    const prettier = require("prettier");
+    prettier.format(p, {parser:"babel"}).then((code) => {
+      console.log(code);
+    });
     return eval(p);
   }
 
 Program
   = statements:(Statement _ ";" _)* e:Expression? _ {
-    console.log("statements: ", statements);
-    console.log("return: ", e);
+    // console.log("statements: ", statements);
+    // console.log("return: ", e);
     const code = statements.reduce((acc, x) => `${acc} ${x[0]};\n`, "");
     const returnCode = e ? `return (${e});` : "";
     return `(() => {\n${code}${returnCode}\n})()`;
