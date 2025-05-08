@@ -1,8 +1,9 @@
-var x = 30;
+var x = 10;
 var y=20;
-var adicias2 = a @ b @ a+b;
-var adicias3 = a @ b @ c @ a+b+c;
 var adicias4 = a @ b @ c @ d @ a+b+c+d;
+var adicias3 = adicias4(0);
+var adicias2 = adicias3(0);
+
 var s = 0;
 
 var i = 0;
@@ -16,14 +17,16 @@ dum(i){
   }alie{
     s = s - i;
   };
-  i = i-1;
+  i = i - 1;
 };
 
-i = 5;
+i = 15;
 fari{
   s = adicias2(s)(i);
-  i = i-1;
+  i = i - se (s%2 == 0) tiam 1 alie 2;
 }dum(i);
 
-( (1+2)*3 + adicias3((4+5)*6) (se s > 7 tiam 8 alie 9) (i = 10) ) * 10;
-s
+s = s + (se vero tiam se vero tiam 3 alie 4 alie 2 * 10) * 10;
+
+"Kalkulis: " + s
+

@@ -43,7 +43,7 @@ DoWhileStatement
     return `do ${body} while(${cond})`;
   }
 
-Expression = LambdaExpression / IfThenElseExpression / AssignmentExpression / OrExpression
+Expression = LambdaExpression / AssignmentExpression / OrExpression
 
 VariableDeclaration
   = "var" __ name:Identifier _ "=" _ value:Expression {
@@ -54,10 +54,6 @@ AssignmentExpression
     return `${name} = ${value}`;
   }
 
-IfThenElseExpression
-  = "se" __ a:Expression __ "tiam" __ b:Expression __ "alie" __  c:Expression {
-    return `${a} ? ${b} : ${c}`;
-  }
 LambdaExpression
   = i:Identifier _ "@" _ e:Expression {
     return `${i} => ${e}`;
@@ -106,7 +102,13 @@ MultiOperator = "*" / "/" / "%"
 
 // 項
 Term
-  = Paren / String / Number / Identifier / Boolean / Undefined / Null / Identifier
+  = Paren / String / Number / Identifier / Boolean / Undefined / Null / IfThenElseTerm / Identifier
+
+
+IfThenElseTerm
+  = "se" __ a:Expression __ "tiam" __ b:Expression __ "alie" __  c:Expression {
+    return `${a} ? ${b} : ${c}`;
+  }
 
 // 丸括弧
 Paren
