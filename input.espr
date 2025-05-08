@@ -1,6 +1,22 @@
 var x = 30;
 var y=20;
-var adicii = a @ b @ se a>b tiam a alie b;
-var z = adicii(x)(y);
-var s = "abc\n";
-s + z
+var adicias = a @ b @ a+b;
+var s = 0;
+
+por(var i = 0; i < 10; i = i + 1){
+  s = adicias(s)(i);
+};
+
+var i = 10;
+dum(i){
+  s = adicias(s)(i);
+  i = i-1;
+};
+
+i = 5;
+fari{
+  s = adicias(s)(i);
+  i = i-1;
+}dum(i);
+
+s

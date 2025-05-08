@@ -9,18 +9,40 @@ Program
     console.log("statements: ", statements);
     console.log("return: ", e);
     const code = statements.reduce((acc, x) => `${acc} ${x[0]};\n`, "");
-    const returnCode = `return (${e});`;
-    return `(() => { ${code}${returnCode} })()`;
+    const returnCode = e ? `return (${e});` : "";
+    return `(() => {\n${code}${returnCode}\n})()`;
   }
 
-Statement = VariableDeclaration / Expression
+Statement = Block / ForStatement / WhileStatement / DoWhileStatement / Expression
+
+Block
+  = "{" _ stmts:(Statement _ ";" _)* _ "}" {
+    return `{\n${stmts.map(s => s[0]).join(";\n")};\n}`;
+  }
+
+ForStatement
+  = "por" _ "(" _ init:Expression _ ";" _ cond:Expression _ ";" _ update:Expression _ ")" _ body:Statement {
+    return `for (${init}; ${cond}; ${update}) ${body}`;
+  }
+WhileStatement
+  = "dum" _ "(" _ cond:Expression _ ")" _ body:Statement {
+    return `while (${cond}) ${body}`;
+  }
+DoWhileStatement
+  = "fari" _ body:Statement _ "dum" _ "(" _ cond:Expression _ ")" {
+    return `do ${body} while(${cond})`;
+  }
+
+Expression = LambdaExpression / IfThenElseExpression / VariableDeclaration / AssignmentExpression / OrExpression
 
 VariableDeclaration
   = "var" __ name:Identifier _ "=" _ value:Expression {
-    return `const ${name} = ${value}`;
+    return `let ${name} = ${value}`;
   }
-
-Expression = LambdaExpression / IfThenElseExpression / OrExpression
+AssignmentExpression
+  = name:Identifier _ "=" _ value:Expression {
+    return `${name} = ${value}`;
+  }
 
 IfThenElseExpression
   = "se" __ a:Expression __ "tiam" __ b:Expression __ "alie" __  c:Expression {
@@ -122,12 +144,13 @@ Boolean
 
 // 変数名
 Identifier
-  = head:IdentifierStart tail:IdentifierContinue* {
+  = !ReservedWord head:IdentifierStart tail:IdentifierContinue* {
     return "$" + text();
   }
 
 // 予約語
-ReservedWord = ("var"/"vera"/"falsa"/"kaj"/"aux") !IdentifierContinue
+ReservedWord
+  = ("var" / "vera" / "falsa" / "kaj" / "aux" / "se" / "tiam" / "alie" / "por" / "dum" / "fari") !IdentifierContinue
 // 変数名の先頭文字
 IdentifierStart = [A-Za-z_]
 // 変数名の後続文字
