@@ -42,13 +42,13 @@ DoWhileStatement
   = "fari" _ body:Statement _ "dum" _ "(" _ cond:Expression _ ")" {
     return `do ${body} while(${cond})`;
   }
-
-Expression = LambdaExpression / AssignmentExpression / OrExpression
-
 VariableDeclaration
   = "var" __ name:Identifier _ "=" _ value:Expression {
     return `let ${name} = ${value}`;
   }
+
+Expression = LambdaExpression / AssignmentExpression / OrExpression
+
 AssignmentExpression
   = name:Identifier _ "=" _ value:Expression {
     return `${name} = ${value}`;
@@ -60,11 +60,11 @@ LambdaExpression
   }
 OrExpression
   = head:AndExpression tail:(_ OrOperator _ AndExpression)* {
-    return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
+    return tail.reduce((acc, x) => `(${acc}) || (${x[3]})`, head);
   }
 AndExpression
   = head:EqualExpression tail:(_ AndOperator _ EqualExpression)* {
-    return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
+    return tail.reduce((acc, x) => `(${acc}) && (${x[3]})`, head);
   }
 EqualExpression
   = head:RelatExpression tail:(_ EqualOperator _ RelatExpression)? {

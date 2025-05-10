@@ -27,6 +27,7 @@ fari{
 }dum(i);
 
 s = s + (se vero tiam se vero tiam 3 alie 4 alie 2 * 10) * 10;
+s = s + se (vero kaj malvero) tiam 1 alie 10;
+s = s + se vero aux malvero tiam 1 alie 10;
 
 "Kalkulis: " + s
-
