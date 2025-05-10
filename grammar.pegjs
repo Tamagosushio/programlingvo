@@ -50,7 +50,7 @@ VariableDeclaration
 Expression = LambdaExpression / AssignmentExpression / OrExpression
 
 AssignmentExpression
-  = name:Identifier _ "=" _ value:Expression {
+  = name:MemberExpression _ "=" _ value:Expression {
     return `${name} = ${value}`;
   }
 
@@ -83,10 +83,18 @@ MultiExpression
     return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
   }
 CallExpression
-  = callee:Term tail:(_ Argument)* {
+  = callee:MemberExpression tail:(_ Argument)* {
     return tail.reduce((acc, x) => `${acc}${x[1]}`, callee);
   }
+MemberExpression
+  = base:Term tail:(_ MemberAccess)* {
+    return tail.reduce((acc, x) => `${acc}${x[1]}`, base);
+  }
 
+MemberAccess
+  = "." idx:[0-9]+ {
+    return `[${idx.join("")}]`;
+  }
 Argument
   = "(" _ e:Expression _ ")" {
     return `(${e})`;
@@ -102,8 +110,15 @@ MultiOperator = "*" / "/" / "%"
 
 // 項
 Term
-  = Paren / String / Number / Identifier / Boolean / Undefined / Null / IfThenElseTerm / Identifier
+  = Paren / String / Number / Boolean / Undefined / Null / IfThenElseTerm / ArrayLiteral / Identifier
 
+ArrayLiteral
+  = "[" _ elements:(Expression (_ "," _ Expression)*)? _ ","? _ "]" {
+    const allElements = elements
+      ? [elements[0], ...(elements[1].map(x => x[3]))]
+      : [];
+    return `[${allElements.join(", ")}]`;
+  }
 
 IfThenElseTerm
   = "se" __ a:Expression __ "tiam" __ b:Expression __ "alie" __  c:Expression {

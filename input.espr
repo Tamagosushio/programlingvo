@@ -30,4 +30,11 @@ s = s + (se vero tiam se vero tiam 3 alie 4 alie 2 * 10) * 10;
 s = s + se (vero kaj malvero) tiam 1 alie 10;
 s = s + se vero aux malvero tiam 1 alie 10;
 
+var list = [0,1,2,3];
+list.0 = list.1 + list.2 * list.3;
+s = s + list.0;
+
+var listFunc = x @ y @ x*y;
+s = s + listFunc(list.0)(list.3);
+
 "Kalkulis: " + s
