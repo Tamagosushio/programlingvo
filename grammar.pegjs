@@ -50,9 +50,11 @@ VariableDeclaration
 Expression = LambdaExpression / AssignmentExpression / OrExpression
 
 AssignmentExpression
-  = name:MemberExpression _ "=" _ value:Expression {
-    return `${name} = ${value}`;
+  = name:MemberExpression _ op:AssignmentOperator _ value:Expression {
+    return `${name} ${op} ${value}`;
   }
+AssignmentOperator
+  = "=" / "*=" / "/=" / "%=" / "+=" / "-="
 
 LambdaExpression
   = i:Identifier _ "@" _ e:Expression {
