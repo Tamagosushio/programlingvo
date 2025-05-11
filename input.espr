@@ -38,4 +38,10 @@ s += listo.0 * listo.3;
 var listoFunkcio = x @ y @ x*y;
 s += listoFunkcio(listo.0)(listo.3);
 
-"Kalkulis: " + s
+vidigas("s: " + s);
+
+var recevasDecimalon = x @ analizasDecimalon(enigas(x));
+var enigis = recevasDecimalon("enigo decimalon: ");
+s += enigis;
+
+"Kalkulis: s + enigis = " + s

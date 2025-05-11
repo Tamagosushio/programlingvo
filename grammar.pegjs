@@ -86,6 +86,9 @@ MultiExpression
   }
 CallExpression
   = callee:MemberExpression tail:(_ Argument)* {
+    if(callee === "$vidigas") return `console.log${tail.map(x => x[1]).join("")}`;
+    else if(callee === "$enigas") return `require("readline-sync").question${tail.map(x => x[1]).join("")}`;
+    else if(callee === "$analizasDecimalon") return `parseFloat${tail.map(x => x[1]).join("")}`;
     return tail.reduce((acc, x) => `${acc}${x[1]}`, callee);
   }
 MemberExpression
