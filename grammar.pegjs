@@ -16,7 +16,11 @@ Program
     return `(() => {\n${code}${returnCode}\n})()`;
   }
 
-Statement = Block / IfThenElseStatement / ForStatement / WhileStatement / DoWhileStatement / VariableDeclaration / Expression
+Statement =
+   Block / IfThenElseStatement
+   / ForStatement / WhileStatement / DoWhileStatement
+   / ReturnStatement / ContinueStatement / BreakStatement
+   / VariableDeclaration / Expression
 
 Block
   = "{" _ stmts:(Statement _ ";" _)* _ "}" {
@@ -41,6 +45,18 @@ WhileStatement
 DoWhileStatement
   = "fari" _ body:Statement _ "dum" _ "(" _ cond:Expression _ ")" {
     return `do ${body} while(${cond})`;
+  }
+ReturnStatement
+  = "redonas" __ e:Expression {
+    return `return ${e}`;
+  }
+ContinueStatement
+  = "dauxrigas" {
+    return `continue`;
+  }
+BreakStatement
+  = "rompas" {
+    return "break";
   }
 VariableDeclaration
   = "var" __ name:Identifier _ "=" _ value:Expression {

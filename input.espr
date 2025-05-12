@@ -47,4 +47,20 @@ s += enigis;
 var vidigasSaluton = @ vidigas("Saluton!");
 vidigasSaluton();
 
-"Kalkulis: s + enigis = " + s
+var sumigasEnigisDecimalojn = @ {
+  var sumigo = 0;
+  dum(vero){
+    var provizoro = enigas("enigo decimalon: ");
+    se(provizoro == "q")tiam{
+      rompas;
+    }alie{
+      sumigo += analizasDecimalon(provizoro);
+    };
+  };
+  redonas sumigo;
+};
+
+vidigas("s: " + s);
+s += sumigasEnigisDecimalojn();
+
+"Kalkulis: s = " + s
