@@ -57,9 +57,8 @@ AssignmentOperator
   = "=" / "*=" / "/=" / "%=" / "+=" / "-="
 
 LambdaExpression
-  = i:Identifier? _ "@" _ e:Expression {
-    console.log(`${i ?? "()"} => ${e}`);
-    return `${i ?? "()"} => ${e}`;
+  = i:Identifier? _ "@" _ body:(Block / Expression) {
+    return `${i ?? "()"} => ${body}`;
   }
 OrExpression
   = head:AndExpression tail:(_ OrOperator _ AndExpression)* {
