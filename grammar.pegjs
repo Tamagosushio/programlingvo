@@ -57,8 +57,9 @@ AssignmentOperator
   = "=" / "*=" / "/=" / "%=" / "+=" / "-="
 
 LambdaExpression
-  = i:Identifier _ "@" _ e:Expression {
-    return `${i} => ${e}`;
+  = i:Identifier? _ "@" _ e:Expression {
+    console.log(`${i ?? "()"} => ${e}`);
+    return `${i ?? "()"} => ${e}`;
   }
 OrExpression
   = head:AndExpression tail:(_ OrOperator _ AndExpression)* {
@@ -101,8 +102,8 @@ MemberAccess
     return `[${idx.join("")}]`;
   }
 Argument
-  = "(" _ e:Expression _ ")" {
-    return `(${e})`;
+  = "(" _ e:Expression? _ ")" {
+    return `(${e ?? ""})`;
   }
 
 // 演算子定義

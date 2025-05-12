@@ -44,4 +44,7 @@ var recevasDecimalon = x @ analizasDecimalon(enigas(x));
 var enigis = recevasDecimalon("enigo decimalon: ");
 s += enigis;
 
+var vidigasSaluton = @ vidigas("Saluton!");
+vidigasSaluton();
+
 "Kalkulis: s + enigis = " + s
