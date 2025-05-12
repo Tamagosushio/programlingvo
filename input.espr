@@ -1,66 +1,10 @@
-var x = 10;
-var y=20;
-var adicias4 = a @ b @ c @ d @ a+b+c+d;
-var adicias3 = adicias4(0);
-var adicias2 = adicias3(0);
 
-var s = 0;
+vidigas("1 << 2 = " + (1 << 2));
+vidigas("3 >> 1 = " + (3 >> 1));
+vidigas("3 & 1 = " + (3 & 1));
+vidigas("3 ^ 1 = " + (3 ^ 1));
+vidigas("2 | 1 = " + (2 | 1));
+vidigas("~3 = " + (~3));
+vidigas("!malvero kaj vero = " + (!malvero kaj vero));
 
-var i = 0;
-por(i = 0; i < 10; i = i + 1){
-  s = adicias2(s)(i);
-};
 
-dum(i){
-  se(i%2 == 0)tiam{
-    s = adicias2(s)(i);
-  }alie{
-    s = s - i;
-  };
-  i = i - 1;
-};
-
-i = 15;
-fari{
-  s = adicias2(s)(i);
-  i = i - se (s%2 == 0) tiam 1 alie 2;
-}dum(i);
-
-s = s + (se vero tiam se vero tiam 3 alie 4 alie 2 * 10) * 10;
-s = s + se (vero kaj malvero) tiam 1 alie 10;
-s = s + se vero aux malvero tiam 1 alie 10;
-
-s *= 0;
-var listo = [0,1,2,3];
-listo.0 = listo.1 + listo.2 * listo.3;
-s += listo.0 * listo.3;
-
-var listoFunkcio = x @ y @ x*y;
-s += listoFunkcio(listo.0)(listo.3);
-
-vidigas("s: " + s);
-
-var recevasDecimalon = x @ analizasDecimalon(enigas(x));
-var enigis = recevasDecimalon("enigo decimalon: ");
-s += enigis;
-
-var vidigasSaluton = @ vidigas("Saluton!");
-vidigasSaluton();
-
-var sumigasEnigisDecimalojn = @ {
-  var sumigo = 0;
-  dum(vero){
-    var provizoro = enigas("enigo decimalon: ");
-    se(provizoro == "q")tiam{
-      rompas;
-    }alie{
-      sumigo += analizasDecimalon(provizoro);
-    };
-  };
-  redonas sumigo;
-};
-
-vidigas("s: " + s);
-s += sumigasEnigisDecimalojn();
-
-"Kalkulis: s = " + s

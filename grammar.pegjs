@@ -33,10 +33,7 @@ IfThenElseStatement
   }
 ForStatement
   = "por" _ "(" _ init:(Expression / VariableDeclaration)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:Statement {
-    const initCode = init ?? "";
-    const condCode = cond ?? "";
-    const updateCode = update ?? "";
-    return `for (${initCode}; ${condCode}; ${updateCode}) ${body}`;
+    return `for (${init ?? ""}; ${cond ?? ""}; ${update ?? ""}) ${body}`;
   }
 WhileStatement
   = "dum" _ "(" _ cond:Expression _ ")" _ body:Statement {
@@ -81,15 +78,23 @@ OrExpression
     return tail.reduce((acc, x) => `(${acc}) || (${x[3]})`, head);
   }
 AndExpression
-  = head:EqualExpression tail:(_ AndOperator _ EqualExpression)* {
+  = head:BitExpression tail:(_ AndOperator _ BitExpression)* {
     return tail.reduce((acc, x) => `(${acc}) && (${x[3]})`, head);
+  }
+BitExpression
+  = head:EqualExpression tail:(_ BitOperator _ EqualExpression)* {
+    return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
   }
 EqualExpression
   = head:RelatExpression tail:(_ EqualOperator _ RelatExpression)? {
     return tail === null ? head : `(${head}) ${tail[1]} (${tail[3]})`;
   }
 RelatExpression
-  = head:AddExpression tail:(_ RelatOperator _ AddExpression)? {
+  = head:ShiftExpression tail:(_ RelatOperator _ ShiftExpression)? {
+    return tail === null ? head : `(${head}) ${tail[1]} (${tail[3]})`;
+  }
+ShiftExpression
+  = head:AddExpression tail:(_ ShiftOperator _ AddExpression)? {
     return tail === null ? head : `(${head}) ${tail[1]} (${tail[3]})`;
   }
 AddExpression
@@ -97,8 +102,12 @@ AddExpression
     return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
   }
 MultiExpression
-  = head:CallExpression tail:(_ MultiOperator _ CallExpression)* {
+  = head:NotExpression tail:(_ MultiOperator _ NotExpression)* {
     return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
+  }
+NotExpression
+  = ops:(NotOperator _)* e:CallExpression? {
+    return ops.reduceRight((acc, op) => `(${op[0]}${acc})`, e);
   }
 CallExpression
   = callee:MemberExpression tail:(_ Argument)* {
@@ -124,10 +133,13 @@ Argument
 // 演算子定義
 OrOperator = "aux" / "||"
 AndOperator = "kaj" / "&&"
+BitOperator = "&" / "^" / "|"
 EqualOperator = "==" / "!="
 RelatOperator = ">=" / ">" / "<=" / "<"
+ShiftOperator = ">>>" / ">>" / "<<"
 AddOperator = "+" / "-"
 MultiOperator = "*" / "/" / "%"
+NotOperator = "ne" / "!" / "~"
 
 // 項
 Term
@@ -210,7 +222,7 @@ Identifier
 
 // 予約語
 ReservedWord
-  = ("var" / "nedifinito" / "nulo" / "vero" / "malvero" / "kaj" / "aux" / "se" / "tiam" / "alie" / "por" / "dum" / "fari") !IdentifierContinue
+  = ("var" / "nedifinito" / "nulo" / "vero" / "malvero" / "ne" / "kaj" / "aux" / "se" / "tiam" / "alie" / "por" / "dum" / "fari") !IdentifierContinue
 // 変数名の先頭文字
 IdentifierStart = [A-Za-z_]
 // 変数名の後続文字
