@@ -1,9 +1,9 @@
 var a = 0;
 var b = 0;
-
-dum(a < 5){
-  b += a++;
-  vidigas("b=" + b++);
+por(var i = 0; i < 5; i++){
+  vidigas("a++ : " + a++);
+};
+por(var i = 0; i < 5; i++){
+  vidigas("++b : " + ++b);
 };
 
-b

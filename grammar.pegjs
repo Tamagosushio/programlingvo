@@ -32,7 +32,7 @@ IfThenElseStatement
     return `if(${e})${trueBody}else${falseBody}`;
   }
 ForStatement
-  = "por" _ "(" _ init:(Expression / VariableDeclaration)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:Statement {
+  = "por" _ "(" _ init:(VariableDeclaration / Expression)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:Statement {
     return `for (${init ?? ""}; ${cond ?? ""}; ${update ?? ""}) ${body}`;
   }
 WhileStatement
@@ -60,13 +60,7 @@ VariableDeclaration
     return `let ${name} = ${value}`;
   }
 
-Expression = UpdateExpression / LambdaExpression / AssignmentExpression / OrExpression
-
-UpdateExpression
-  = i:Identifier _ op:UpdateOperator {return `${i}${op}`;}
-  / op:UpdateOperator _ i:Identifier {return `${op}${i}`;}
-UpdateOperator
-  = "++" / "--"
+Expression = LambdaExpression / AssignmentExpression / OrExpression
 
 AssignmentExpression
   = name:MemberExpression _ op:AssignmentOperator _ value:Expression {
@@ -113,9 +107,12 @@ MultiExpression
     return tail.reduce((acc, x) => `(${acc}) ${x[1]} (${x[3]})`, head);
   }
 NotExpression
-  = ops:(NotOperator _)* e:CallExpression? {
+  = ops:(NotOperator _)* e:UpdateExpression? {
     return ops.reduceRight((acc, op) => `(${op[0]}${acc})`, e);
   }
+UpdateExpression
+  = i:CallExpression _ op:UpdateOperator? {return `${i}${op ?? ""}`;}
+  / op:UpdateOperator? _ i:CallExpression {return `${op ?? ""}${i}`;}
 CallExpression
   = callee:MemberExpression tail:(_ Argument)* {
     if(callee === "$vidigas") return `console.log${tail.map(x => x[1]).join("")}`;
@@ -146,6 +143,7 @@ RelatOperator = ">=" / ">" / "<=" / "<"
 ShiftOperator = ">>>" / ">>" / "<<"
 AddOperator = "+" / "-"
 MultiOperator = "*" / "/" / "%"
+UpdateOperator = "++" / "--"
 NotOperator = "ne" / "!" / "~"
 
 // 項
