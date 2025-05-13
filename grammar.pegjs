@@ -60,7 +60,13 @@ VariableDeclaration
     return `let ${name} = ${value}`;
   }
 
-Expression = LambdaExpression / AssignmentExpression / OrExpression
+Expression = UpdateExpression / LambdaExpression / AssignmentExpression / OrExpression
+
+UpdateExpression
+  = i:Identifier _ op:UpdateOperator {return `${i}${op}`;}
+  / op:UpdateOperator _ i:Identifier {return `${op}${i}`;}
+UpdateOperator
+  = "++" / "--"
 
 AssignmentExpression
   = name:MemberExpression _ op:AssignmentOperator _ value:Expression {
@@ -73,6 +79,7 @@ LambdaExpression
   = i:Identifier? _ "@" _ body:(Block / Expression) {
     return `${i ?? "()"} => ${body}`;
   }
+
 OrExpression
   = head:AndExpression tail:(_ OrOperator _ AndExpression)* {
     return tail.reduce((acc, x) => `(${acc}) || (${x[3]})`, head);

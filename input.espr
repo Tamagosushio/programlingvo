@@ -1,10 +1,9 @@
+var a = 0;
+var b = 0;
 
-vidigas("1 << 2 = " + (1 << 2));
-vidigas("3 >> 1 = " + (3 >> 1));
-vidigas("3 & 1 = " + (3 & 1));
-vidigas("3 ^ 1 = " + (3 ^ 1));
-vidigas("2 | 1 = " + (2 | 1));
-vidigas("~3 = " + (~3));
-vidigas("!malvero kaj vero = " + (!malvero kaj vero));
+dum(a < 5){
+  b += a++;
+  vidigas("b=" + b++);
+};
 
-
+b
