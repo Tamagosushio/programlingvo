@@ -148,7 +148,7 @@ NotOperator = "ne" / "!" / "~"
 
 // 項
 Term
-  = Paren / String / Number / Boolean / Undefined / Null / IfThenElseTerm / ArrayLiteral / Identifier
+  = Paren / String / SignedNumber / Boolean / Undefined / Null / IfThenElseTerm / ArrayLiteral / Identifier
 
 ArrayLiteral
   = "[" _ elements:(Expression (_ "," _ Expression)*)? _ ","? _ "]" {
@@ -189,6 +189,10 @@ NormalChar
   }
 
 // 数
+SignedNumber
+  = sign:("+" / "-")? num:Number {
+    return `${sign ?? ""}${num}`;
+  }
 Number = Float / Integer
 // 小数値
 Float

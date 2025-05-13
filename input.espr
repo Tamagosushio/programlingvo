@@ -1,9 +1,9 @@
 var a = 0;
-var b = 0;
+var b = -5;
 por(var i = 0; i < 5; i++){
   vidigas("a++ : " + a++);
 };
-por(var i = 0; i < 5; i++){
-  vidigas("++b : " + ++b);
+por(var i = -5; i > -10; i--){
+  vidigas("--b : " + --b);
 };
 
