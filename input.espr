@@ -1,9 +1,25 @@
 var a = 0;
 var b = -5;
-por(var i = 0; i < 5; i++){
-  vidigas("a++ : " + a++);
-};
-por(var i = -5; i > -10; i--){
-  vidigas("--b : " + --b);
-};
+var i = 0;
 
+por(i = 0; i < 5; i++){
+  a += b;
+  vidigas("a = " + a++);
+}
+
+i = 10;
+dum(i--) vidigas("--b : " + --b);
+
+i = 5;
+fari{
+  vidigas("i=" + i);
+}dum(i--);
+
+{
+  var x = -10.5;
+  vidigas(x);
+}
+{
+  var x = -3.14;
+  vidigas(x);
+}

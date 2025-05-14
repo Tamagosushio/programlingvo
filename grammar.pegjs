@@ -8,39 +8,71 @@ Start
   }
 
 Program
-  = statements:(Statement _ ";" _)* e:Expression? _ {
-    // console.log("statements: ", statements);
-    // console.log("return: ", e);
-    const code = statements.reduce((acc, x) => `${acc} ${x[0]};\n`, "");
-    const returnCode = e ? `return (${e});` : "";
-    return `(() => {\n${code}${returnCode}\n})()`;
-  }
-
-Statement =
-   Block / IfThenElseStatement
-   / ForStatement / WhileStatement / DoWhileStatement
-   / ReturnStatement / ContinueStatement / BreakStatement
-   / VariableDeclaration / Expression
+  = _ stmts:(
+      s:StatementEndsWithBlock _ {return s;}
+    / s:StatementNeedsSemicolon _ ";" _ {
+        if(s == null) return null;
+        else return `${s};`;
+      }
+    )* e:Expression? _ {
+      const code = stmts.filter(s => s != null).join("\n");
+      const returnCode = e ? `return (${e});` : "";
+      return `(() => {\n${code}${returnCode}\n})()`;
+    }
 
 Block
-  = "{" _ stmts:(Statement _ ";" _)* _ "}" {
-    return `{\n${stmts.map(s => s[0]).join(";\n")};\n}`;
-  }
+  = "{" _ stmts:(
+      s:StatementEndsWithBlock _ {return s;}
+    / s:StatementNeedsSemicolon _ ";" _ {
+        if(s == null) return null;
+        else return `${s};`;
+      }
+    )* _ "}" {
+      const code = stmts.filter(s => s != null).join("\n");
+      return `{\n${code}\n}`;
+    }
+
+StatementNeedsSemicolon
+  = DoWhileStatement / VariableDeclaration / ReturnStatement / ContinueStatement / BreakStatement / Expression
+StatementEndsWithBlock
+  = Block / IfThenElseStatement / ForStatement / WhileStatement
 
 IfThenElseStatement
-  = "se" _ "("_ e:Expression _")" _ "tiam" _ trueBody:Statement _ "alie" _ falseBody:Statement {
+  = "se" _ "("_ e:Expression _")" _ "tiam" _ trueBody:Block _ "alie" _ falseBody:Block {
     return `if(${e})${trueBody}else${falseBody}`;
   }
 ForStatement
-  = "por" _ "(" _ init:(VariableDeclaration / Expression)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:Statement {
-    return `for (${init ?? ""}; ${cond ?? ""}; ${update ?? ""}) ${body}`;
+  = "por" _ "(" _ init:(VariableDeclaration / Expression)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:(
+      b:Block {return b;}
+      / s:StatementNeedsSemicolon _ ";" _ {return s;}
+    ) {
+    let bodyCode;
+    if(typeof(body) === "string" && body.trim().startsWith("{") && body.trim().endsWith("}")){
+      bodyCode = body;
+    }else if(body == null){
+      bodyCode = `{}`;
+    }else{
+      bodyCode = `{ ${body}; }`;
+    }
+    return `for (${init ?? ""}; ${cond ?? ""}; ${update ?? ""}) ${bodyCode}`;
   }
 WhileStatement
-  = "dum" _ "(" _ cond:Expression _ ")" _ body:Statement {
-    return `while (${cond}) ${body}`;
+  = "dum" _ "(" _ cond:Expression _ ")" _ body:(
+      b:Block {return b;}
+      / s:StatementNeedsSemicolon _ ";" _ {return s;}
+    ) {
+    let bodyCode;
+    if(typeof(body) === "string" && body.trim().startsWith("{") && body.trim().endsWith("}")){
+      bodyCode = body;
+    }else if(body == null){
+      bodyCode = `{}`;
+    }else{
+      bodyCode = `{ ${body}; }`;
+    }
+    return `while (${cond}) ${bodyCode}`;    
   }
 DoWhileStatement
-  = "fari" _ body:Statement _ "dum" _ "(" _ cond:Expression _ ")" {
+  = "fari" _ body:Block _ "dum" _ "(" _ cond:Expression _ ")" {
     return `do ${body} while(${cond})`;
   }
 ReturnStatement
