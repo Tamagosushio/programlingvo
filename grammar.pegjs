@@ -10,6 +10,7 @@ Start
 Program
   = _ stmts:(
       s:StatementEndsWithBlock _ {return s;}
+    / s:CommentStatement _ {return s;}
     / s:StatementNeedsSemicolon _ ";" _ {
         if(s == null) return null;
         else return `${s};`;
@@ -23,6 +24,7 @@ Program
 Block
   = "{" _ stmts:(
       s:StatementEndsWithBlock _ {return s;}
+    / s:CommentStatement _ {return s;}
     / s:StatementNeedsSemicolon _ ";" _ {
         if(s == null) return null;
         else return `${s};`;
@@ -37,6 +39,10 @@ StatementNeedsSemicolon
 StatementEndsWithBlock
   = Block / IfThenElseStatement / ForStatement / WhileStatement
 
+CommentStatement
+  = "//" content:(![\n\r] .)* {
+    return null;
+  }
 IfThenElseStatement
   = "se" _ "("_ e:Expression _")" _ "tiam" _ trueBody:Block _ "alie" _ falseBody:Block {
     return `if(${e})${trueBody}else${falseBody}`;

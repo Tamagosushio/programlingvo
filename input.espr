@@ -1,20 +1,21 @@
+// 変数定義
 var a = 0;
 var b = -5;
 var i = 0;
-
+// for文
 por(i = 0; i < 5; i++){
   a += b;
   vidigas("a = " + a++);
 }
-
+// while文
 i = 10;
 dum(i--) vidigas("--b : " + --b);
-
+// do-while文
 i = 5;
 fari{
   vidigas("i=" + i);
-}dum(i--);
-
+}dum(i--); // セミコロンは必須
+// コードブロックテスト
 {
   var x = -10.5;
   vidigas(x);
