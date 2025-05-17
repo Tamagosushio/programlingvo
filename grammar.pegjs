@@ -166,6 +166,8 @@ MemberExpression
 MemberAccess
   = "." idx:[0-9]+ {
     return `[${idx.join("")}]`;
+  } / "[" _ idx:Expression _ "]" {
+    return `[${idx}]`;
   }
 Argument
   = "(" _ e:Expression? _ ")" {

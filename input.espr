@@ -24,3 +24,6 @@ fari{
   var x = -3.14;
   vidigas(x);
 }
+var listo = [0,1,2,3,4];
+vidigas(listo.0);
+vidigas(listo[1+3]);
