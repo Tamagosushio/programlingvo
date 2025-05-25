@@ -29,6 +29,10 @@ Block
         if(s == null) return null;
         else return `${s};`;
       }
+    / s:AssignmentExpression _ ";" _ {
+        if(s == null) return null;
+        else return `${s};`;
+      }
     )* _ "}" {
       const code = stmts.filter(s => s != null).join("\n");
       return `{\n${code}\n}`;
@@ -44,8 +48,30 @@ CommentStatement
     return null;
   }
 IfThenElseStatement
-  = "se" _ "("_ e:Expression _")" _ "tiam" _ trueBody:Block _ "alie" _ falseBody:Block {
-    return `if(${e})${trueBody}else${falseBody}`;
+  = "se" _ "("_ e:Expression _")" _ "tiam" trueBody:(
+      _ b:Block {return b;}
+      / __ s:StatementNeedsSemicolon _ ";" _ {return s;} 
+    ) _ "alie" falseBody:(
+      _ b:Block {return b;}
+      / __ s:StatementNeedsSemicolon _ ";" _ {return s;}
+    ) {
+    let trueBodyCode;
+    if(typeof(trueBody) === "string" && trueBody.trim().startsWith("{") && trueBody.trim().endsWith("}")){
+      trueBodyCode = trueBody;
+    }else if(trueBody == null){
+      trueBodyCode = `{}`;
+    }else{
+      trueBodyCode = `{ ${trueBody}; }`;
+    }
+    let falseBodyCode;
+    if(typeof(falseBody) === "string" && falseBody.trim().startsWith("{") && falseBody.trim().endsWith("}")){
+      falseBodyCode = falseBody;
+    }else if(falseBody == null){
+      falseBodyCode = `{}`;
+    }else{
+      falseBodyCode = `{ ${falseBody}; }`;
+    }
+    return `if(${e})${trueBodyCode}else${falseBodyCode}`;
   }
 ForStatement
   = "por" _ "(" _ init:(VariableDeclaration / Expression)? _ ";" _ cond:Expression? _ ";" _ update:Expression? _ ")" _ body:(
@@ -98,7 +124,7 @@ VariableDeclaration
     return `let ${name} = ${value}`;
   }
 
-Expression = LambdaExpression / AssignmentExpression / OrExpression
+Expression = OrExpression / LambdaExpression / AssignmentExpression
 
 AssignmentExpression
   = name:MemberExpression _ op:AssignmentOperator _ value:Expression {

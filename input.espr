@@ -1,29 +1,9 @@
-// 変数定義
-var a = 0;
-var b = -5;
-var i = 0;
-// for文
-por(i = 0; i < 5; i++){
-  a += b;
-  vidigas("a = " + a++);
+var a = 10;
+var b = 10;
+var s = "";
+se(a == b)tiam{
+  s = "a==b";
+}alie{
+  s = "a!=b";
 }
-// while文
-i = 10;
-dum(i--) vidigas("--b : " + --b);
-// do-while文
-i = 5;
-fari{
-  vidigas("i=" + i);
-}dum(i--); // セミコロンは必須
-// コードブロックテスト
-{
-  var x = -10.5;
-  vidigas(x);
-}
-{
-  var x = -3.14;
-  vidigas(x);
-}
-var listo = [0,1,2,3,4];
-vidigas(listo.0);
-vidigas(listo[1+3]);
+s
